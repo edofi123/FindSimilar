@@ -32,7 +32,6 @@ def check_image(file):
 def print_images_name(image_list):
     for image in image_list:
         print(str(image_list.index(image) + 1) + ". " + image)
-    print()
     return input()
 
 
@@ -113,21 +112,23 @@ def search_similar(path, accuracy):
     checked_files = []
     similar_images = {}
     open_files = {}
-    rand_pixel = []
+    rand_pixel_width = []
+    rand_pixel_height = []
     dir_files = os.listdir(path)
     # Open all the picture and take details
     print("Loading part 1...")
-    for num in range(pixels_to_check):
-        rand_pixel.append(rand(10, 100) / 10)
+    for x in range(pixels_to_check):
+        rand_pixel_width.append(rand(10, 100) / 10)
+        rand_pixel_height.append(rand(10, 100) / 10)
     for file in dir_files:
         if check_image(file):
             info = Image.open(path + '\\' + file)
             pixels = info.load()
             pixels_list = []
             # Choose pixels to examine
-            for num in rand_pixel:
-                x = int((info.width / num) - 1)
-                y = int((info.height / num) - 1)
+            for num in range(pixels_to_check):
+                x = int((info.width / rand_pixel_width[int(num)]) - 1)
+                y = int((info.height / rand_pixel_height[int(num)]) - 1)
                 pixels_list.append(pixels[x, y])
             open_files[file] = (info.size, pixels_list)
             info.close()
@@ -140,11 +141,14 @@ def search_similar(path, accuracy):
                 continue
             if info1[0][0] == info2[0][0] and info1[0][1] == info2[0][1]:
                 similar = True
+                pixels_do_not_match = 0
                 # Compare the pixels
                 for x in range(len(info1[1])):
                     if not tuple_between(tuple_calc(info1[1][x], pixels_range, 0), info2[1][x], tuple_calc(info1[1][x], pixels_range, 1)):
-                        similar = False
-                        break
+                        pixels_do_not_match += 1
+                        if pixels_do_not_match == accuracy:
+                            similar = False
+                            break
                 if similar:
                     if name1 in similar_images:
                         similar_images[name1].append(name2)
