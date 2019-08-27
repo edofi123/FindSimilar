@@ -9,7 +9,7 @@ I am here for you!
 
 Give FindSimilar a path to picture directory, 
 Choose how accurate you want it to be,
-After few calculations it will notify you about similar images and will delete those if you want to!
+After few calculations, it will notify you about similar images and will delete those if you want to!
 A very easy way to arrange your images!
 
 Hope you will like it :)
